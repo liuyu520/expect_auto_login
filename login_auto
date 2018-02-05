@@ -1,0 +1,24 @@
+#!/usr/bin/expect -f
+set loginpass "111"
+set cmd_prompt "]#|~]?"
+set timeout 300
+set project_module "$argv"
+spawn ssh <用户名>@<要ssh的ip>
+expect {
+  -re "connecting (yes/no)?" {
+         send "yes\r"
+    exp_continue;
+     }
+     -re "assword:" {
+         send "$loginpass\r"
+     } -re "Permission denied, please try again." {
+        exit
+     } -re "Connection refused" {
+         exit
+     } timeout {
+        exit
+     } eof {
+        exit
+    }
+}
+interact
